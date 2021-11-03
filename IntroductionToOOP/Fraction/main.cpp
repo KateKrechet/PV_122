@@ -2,6 +2,10 @@
 #include<iostream>
 using namespace std;
 
+int nod(int a, int b);
+int nok(int a, int b);
+
+
 class Fraction
 {
 	int integer;		//Целая часть
@@ -112,6 +116,9 @@ public:
 	void reduce()
 	{
 		//Сокращает дробь:
+		int x = nod(numerator, denominator);
+		numerator /= x;
+		denominator /= x;
 
 	}
 	void print()
@@ -127,15 +134,38 @@ public:
 		cout << endl;
 	}
 
-	Fraction& operator*=(Fraction right)
+	friend Fraction operator*(Fraction, Fraction);
+	Fraction& operator*=(const Fraction right)
 	{
-		this->to_improper();
+		/*this->to_improper();
 		right.to_improper();
-		
+
 		numerator = numerator * right.get_numerator();
 		denominator = denominator * right.get_denominator();
+		return *this;*/
+		*this = *this * right;
 		return *this;
 	}
+	friend Fraction operator/(Fraction, Fraction);
+	Fraction& operator/=(const Fraction right)
+	{
+		*this = *this / right;
+		return *this;
+	}
+	friend Fraction operator+(Fraction, Fraction);
+	Fraction& operator+=(const Fraction right)
+	{
+		*this = *this + right;
+		return *this;
+	}
+	friend Fraction operator-(Fraction, Fraction);
+	Fraction& operator-=(const Fraction right)
+	{
+		*this = *this - right;
+		return *this;
+	}
+
+
 };
 
 Fraction operator*(Fraction left, Fraction right)
@@ -159,11 +189,37 @@ Fraction operator*(Fraction left, Fraction right)
 		left.get_denominator() * right.get_denominator()
 	).to_proper();
 
+
 }
 Fraction operator/(Fraction left, Fraction right)
 {
 	return left * right.invert();
 }
+
+Fraction operator+(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	int mult_denominator = nok(left.get_denominator(), right.get_denominator());
+	return Fraction
+	(
+		left.get_numerator() * (mult_denominator / left.get_denominator()) + right.get_numerator() * (mult_denominator / right.get_denominator()),
+		mult_denominator
+	).to_proper();
+}
+
+Fraction operator-(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	int mult_denominator = nok(left.get_denominator(), right.get_denominator());
+	return Fraction
+	(
+		left.get_numerator() * (mult_denominator / left.get_denominator()) - right.get_numerator() * (mult_denominator / right.get_denominator()),
+		mult_denominator
+	).to_proper();
+}
+
 
 ostream& operator<<(ostream& os, const Fraction& obj)
 {
@@ -203,8 +259,8 @@ void main()
 	//A.print();
 	cout << A << endl;
 #endif // OSTREAM_CHECR
-	int a = 2;
-	int b = 3;
+	int a = 98;
+	int b = 210;
 	int c = a * b;
 
 	Fraction A(1, 2, 3);
@@ -215,4 +271,27 @@ void main()
 	cout << C << endl;
 	A *= B;
 	cout << A << endl;
+	A /= B;
+	cout << A << endl;
+	cout << nok(a, b) << endl;
+	Fraction D = A - B;
+	cout << D << endl;
+	
+	A += B;
+	cout << A << endl;
+	A -= B;
+	cout << A << endl;
+}
+int nod(int a, int b)
+{
+	while (b > 0) {
+		int c = a % b;
+		a = b;
+		b = c;
+	}
+	return a;
+}
+int nok(int a, int b)
+{
+	return a * b / nod(a, b);
 }

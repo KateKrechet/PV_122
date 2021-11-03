@@ -87,22 +87,32 @@ public:
 	}
 
 	//				Methods:
-	void to_proper()
+	Fraction& to_proper()
 	{
 		//Переводит дробь в правильную - выделяет целую часть:
 		integer += numerator / denominator;
-		numerator %= denominator;	
+		numerator %= denominator;
+		return *this;
 	}
-	void to_improper()
+	Fraction& to_improper()
 	{
 		//Переводит дробь в НЕправильную - интегрирует целую часть в числитель:
 		numerator += integer * denominator;
 		integer = 0;
+		return *this;
+	}
+	Fraction& invert()
+	{
+		to_improper();
+		int buffer = numerator;
+		numerator = denominator;
+		denominator = buffer;
+		return *this;
 	}
 	void reduce()
 	{
 		//Сокращает дробь:
-	https://www.webmath.ru/poleznoe/formules_12_7.php
+
 	}
 	void print()
 	{
@@ -116,10 +126,60 @@ public:
 		else if (integer == 0)cout << 0;
 		cout << endl;
 	}
+
+	Fraction& operator*=(Fraction right)
+	{
+		this->to_improper();
+		right.to_improper();
+		
+		numerator = numerator * right.get_numerator();
+		denominator = denominator * right.get_denominator();
+		return *this;
+	}
 };
 
-//#define CONSTRUCTORS_CHECK
+Fraction operator*(Fraction left, Fraction right)
+{
+	left.to_improper();
+	right.to_improper();
+	/*Fraction result
+	(
+		left.get_numerator() * right.get_numerator(),
+		left.get_denominator() * right.get_denominator()
+	);
+	//result.set_numerator(left.get_numerator() * right.get_numerator());
+	//result.set_denominator(left.get_denominator() * right.get_denominator());
+	result.to_proper();
+	return result;*/
+	//Явно вызываем конструктор прямо в return
+	//Этот конструктор создает временный безымянный объект, кот return возвращает сразу на место вызова
+	return Fraction
+	(
+		left.get_numerator() * right.get_numerator(),
+		left.get_denominator() * right.get_denominator()
+	).to_proper();
 
+}
+Fraction operator/(Fraction left, Fraction right)
+{
+	return left * right.invert();
+}
+
+ostream& operator<<(ostream& os, const Fraction& obj)
+{
+	if (obj.get_integer())os << obj.get_integer();	//Если есть целая часть, выводим ее на экран
+	if (obj.get_numerator())
+	{
+		if (obj.get_integer())os << "(";
+		os << obj.get_numerator() << "/" << obj.get_denominator();
+		if (obj.get_integer())os << ")";
+	}
+	else if (obj.get_integer() == 0)os << 0;
+	return os;
+}
+
+//#define CONSTRUCTORS_CHECK
+//#define OSTREAM_CHECR
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -134,9 +194,25 @@ void main()
 	D.print();
 #endif // CONSTRUCTORS_CHECK
 
+#ifdef OSTREAM_CHECR
 	Fraction A(14, 4);
 	A.to_proper();
-	A.print();
+	//A.print();
+	cout << A << endl;
 	A.to_improper();
-	A.print();
+	//A.print();
+	cout << A << endl;
+#endif // OSTREAM_CHECR
+	int a = 2;
+	int b = 3;
+	int c = a * b;
+
+	Fraction A(1, 2, 3);
+	Fraction B(2, 4, 5);
+	cout << A << endl;
+	cout << B << endl;
+	Fraction C = A / B;
+	cout << C << endl;
+	A *= B;
+	cout << A << endl;
 }

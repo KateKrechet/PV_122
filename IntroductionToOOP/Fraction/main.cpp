@@ -211,6 +211,19 @@ public:
 		integer++;
 		return old;
 	}
+	Fraction& operator--()//Prefix
+	{
+		to_proper();
+		integer--;
+		return *this;
+	}
+	Fraction operator--(int)
+	{
+		Fraction old = *this;
+		to_proper();
+		integer--;
+		return old;
+	}
 
 };
 
@@ -275,7 +288,7 @@ bool operator==(Fraction left, Fraction right)
 		return true;
 	else
 		return false;*/
-	//return left.get_numerator() * right.get_denominator() == right.get_numerator() * left.get_denominator();
+		//return left.get_numerator() * right.get_denominator() == right.get_numerator() * left.get_denominator();
 	return
 		left.to_improper().get_numerator() * right.get_denominator() ==
 		right.to_improper().get_numerator() * left.get_denominator();
@@ -337,6 +350,7 @@ istream& operator>>(istream& is, Fraction& obj)
 	int n = 0;
 	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
 	{
+		//http://cplusplus.com/reference/cstring/strtok/
 		value[n++] = pch;
 	}
 	/*for (int i = 0; i < n; i++)
@@ -347,21 +361,24 @@ istream& operator>>(istream& is, Fraction& obj)
 	switch (n)
 	{
 	case 1: obj.set_integer(atoi(value[0])); break;
+		//http://cplusplus.com/reference/cstdlib/
+		//http://cplusplus.com/reference/cstdlib/atoi/
 	case 2: obj.set_numerator(atoi(value[0]));
-		    obj.set_denominator(atoi(value[1]));
-		    break;
+		obj.set_denominator(atoi(value[1]));
+		break;
 	case 3:
 		obj.set_integer(atoi(value[0]));
 		obj.set_numerator(atoi(value[1]));
 		obj.set_denominator(atoi(value[2]));
-		     
+
 	}
-		return is;
+	return is;
 
 }
 //#define CONSTRUCTORS_CHECK
 //#define OSTREAM_CHECR
-//#define ARITHMETICAL_OPERATORS_CHECK
+//#define ISTREAM CHECK
+#define ARITHMETICAL_OPERATORS_CHECK
 //#define COMPARISON_OPERATORS
 void main()
 {
@@ -413,6 +430,10 @@ void main()
 	A = B++;
 	cout << A << endl;
 	cout << B << endl;
+	A = --B;
+	cout << A << endl;
+	cout << B << endl;
+
 #endif // ARITHMETICAL_OPERATORS_CHECK
 #ifdef COMPARISON_OPERATORS
 	Fraction A(1, 5, 10);
@@ -425,10 +446,15 @@ void main()
 	cout << (A <= B) << endl;
 
 #endif // COMPARISON_OPERATORS
+#ifdef ISTREAM_CHECK
 	Fraction A;
 	cout << "Введите дробь: ";
 	cin >> A;
 	cout << A << endl;
+#endif // ISTREAM_CHECK
+
+
+
 }
 int nod(int a, int b)
 {

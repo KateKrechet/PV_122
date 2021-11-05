@@ -1,4 +1,6 @@
 ﻿//Fraction - описываем простую дробь
+#pragma warning(disable:4326)
+#define _CRT_SECURE_NO_WARNINGS
 #include<iostream>
 using namespace std;
 using std::cin;
@@ -56,7 +58,7 @@ public:
 		this->denominator = 1;
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	Fraction(int integer)
+	explicit Fraction(int integer)
 	{
 		//Single-argument constructor - Конструктор с одним параметром.
 		this->integer = integer;
@@ -98,6 +100,16 @@ public:
 		this->denominator = other.denominator;
 		cout << "CopyAssignment:\t" << this << endl;
 		return *this;
+	}
+	//              Type-cast operators:
+
+	explicit operator int()const
+	{
+		return integer;
+	}
+	operator double()const
+	{
+		return integer + (double)numerator / denominator;
 	}
 
 	//				Methods:
@@ -378,8 +390,10 @@ istream& operator>>(istream& is, Fraction& obj)
 //#define CONSTRUCTORS_CHECK
 //#define OSTREAM_CHECR
 //#define ISTREAM CHECK
-#define ARITHMETICAL_OPERATORS_CHECK
+//#define ARITHMETICAL_OPERATORS_CHECK
 //#define COMPARISON_OPERATORS
+//#define TYPE_CONVERSION_BASICS
+//#define CONVERSION_FROM_OTHER_TO_CLASS
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -453,8 +467,37 @@ void main()
 	cout << A << endl;
 #endif // ISTREAM_CHECK
 
+#ifdef TYPE_CONVERSION_BASICS
+	int a = 2;// no conversions
+	double b = 3;//conversion from int to double
+				 //from less to more
+	int c = b;// conversion from double to int 
+			  //from more to less without data loss
+	int d = 4.5;//conversion from double to int
+				//from more to less with data loss
+	cout << d << endl;
+#endif // TYPE_CONVERSION_BASICS
 
+#ifdef CONVERSION_FROM_OTHER_TO_CLASS
+	double a = 2;//From int to double(from less to more)
+	Fraction A = (Fraction)5;//From int to Fraction (from less to more)
+	cout << A << endl;
+	cout << "\n------------------------------------\n";
+	Fraction B;
+	cout << "\n------------------------------------\n";
+	B = (Fraction)8;
+	cout << "\n------------------------------------\n";
+	cout << B << endl;
 
+	Fraction C(12);//explicit конструктор м вызвать так и нельзя: Fraction C=12
+	cout << C << endl;
+#endif // CONVERSION_FROM_OTHER_TO_CLASS
+	Fraction A(2, 3, 4);
+	int a = (int)A;
+	cout <<A<<endl;
+	cout << a << endl;
+	double b = A;
+	cout << b << endl;
 }
 int nod(int a, int b)
 {

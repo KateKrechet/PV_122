@@ -66,6 +66,18 @@ public:
 		this->denominator = 1;
 		cout << "SingleArgConstructor:" << this << endl;
 	}
+	Fraction(double decimal)
+	{
+		
+		decimal += 1e-11;//ищем приближение
+		integer = decimal;//сохраним целую часть в десятичной дроби
+		decimal -= integer;//убираем целую часть из десятичной дроби
+		denominator = 1e+9;//*10 в 9 степени
+		numerator = decimal * denominator;//умножаем дробную часть десятичной дроби на миллиард
+		//и таким образом вся дробная часть переходит в целую часть.и сохраняем ее в числителе
+		reduce();
+		cout << "doubleConstructor:\t" << this << endl;
+	}
 	Fraction(int numerator, int denominator)
 	{
 		this->integer = 0;
@@ -107,7 +119,7 @@ public:
 	{
 		return integer;
 	}
-	operator double()const
+	explicit operator double()const
 	{
 		return integer + (double)numerator / denominator;
 	}
@@ -138,6 +150,11 @@ public:
 	Fraction& reduce()
 	{
 		//Сокращает дробь:
+		if (numerator == 0)
+		{
+			denominator = 1;
+			return *this;
+		}
 		int x = nod(numerator, denominator);
 		numerator /= x;
 		denominator /= x;
@@ -394,6 +411,7 @@ istream& operator>>(istream& is, Fraction& obj)
 //#define COMPARISON_OPERATORS
 //#define TYPE_CONVERSION_BASICS
 //#define CONVERSION_FROM_OTHER_TO_CLASS
+//#define CONVERSION_TO_OTHER_FROM_CLASS
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -492,12 +510,23 @@ void main()
 	Fraction C(12);//explicit конструктор м вызвать так и нельзя: Fraction C=12
 	cout << C << endl;
 #endif // CONVERSION_FROM_OTHER_TO_CLASS
+#ifdef CONVERSION_TO_OTHER_FROM_CLASS
 	Fraction A(2, 3, 4);
 	int a = (int)A;
-	cout <<A<<endl;
+	cout << A << endl;
 	cout << a << endl;
 	double b = A;
 	cout << b << endl;
+#endif // CONVERSION_TO_OTHER_FROM_CLASS
+
+	Fraction A = 2.76;
+	cout << A << endl;
+	Fraction B(2, 76, 100);
+	cout << B << endl;
+	cout << (A == B) << endl;
+
+	Fraction C(1, 3);
+	cout << C*3 << endl;
 }
 int nod(int a, int b)
 {

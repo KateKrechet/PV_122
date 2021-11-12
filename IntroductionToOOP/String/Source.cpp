@@ -24,30 +24,30 @@ public:
 		return str;
 	}
 	//Constructors
-	String(int size = 80)
+	explicit String(int size = 80):size(size),str(new char[size]/*{}*/)
 	{
-		this->size = size;
-		this->str = new char[size] {};
+		//this->size = size;
+		//this->str = new char[size] {};
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	String(const char* str)
+	String(const char* str):size(strlen(str)+1),str(new char[size]{})
 	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size] {};
+		//this->size = strlen(str) + 1;
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = str[i];
 		cout << "Constructor:\t\t" << this << endl;
 	}
-	String(const String& other)
-	{
-		this->size = other.size;
-		this->str = new char[size] {};
+	String(const String& other):size(other.size),str(new char[size]{})
+	{   //Deep copy
+		//this->size = other.size;
+		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
-	String(String&& other)
+	String(String&& other):size(other.size),str(other.str)
 	{
-		this->size = other.size;
-		this->str = other.str;
+		//this->size = other.size;
+		//this->str = other.str;
 		cout << "MoveConstructor:\t" << this << endl;
 		other.str = nullptr;
 		other.size = 0;
@@ -113,7 +113,7 @@ ostream& operator<<(ostream& os, const String& obj)
 
 String operator+(const String& left, const String& right)
 {
-	String buffer = left.get_size() + right.get_size() - 1;
+	String buffer(left.get_size() + right.get_size() - 1);
 	/*for (int i = 0; i < left.get_size(); i++)
 		buffer.get_str()[i] = left.get_str()[i];
 	for (int i = 0; i < right.get_size(); i++)
@@ -132,6 +132,7 @@ String operator+(const String& left, const String& right)
 
 //#define CONSTRUCTORS_CHECK
 #define delimiter "\n---------------------------------------\n"
+//#define OPERATORS_PLUS_CHECK
 void main()
 {
 	setlocale(LC_ALL, "");
@@ -149,6 +150,7 @@ void main()
 	str3 = str2;
 	cout << str3 << endl;
 #endif // CONSTRUCTORS_CHECK
+#ifdef OPERATORS_PLUS_CHECK
 	String str1 = "Hello";
 	str1 = str1;
 	cout << str1 << endl;
@@ -162,5 +164,22 @@ void main()
 	str1 += str2;
 	cout << delimiter << endl;
 	cout << str1 << endl;
+#endif // OPERATORS_PLUS_CHECK
+	String str1(25);//Default constructor;
+	str1.print();
+	String str2="Hello";//Single-argument constructor
+	//cout << str2 << endl;
+	str2.print();
+	String str3("World");//Single-argument constructor
+	cout << str3 << endl;
+	String str4();//ќбь€вление функции str4, котора€ ничего не принимает и возвращает объект класса String
+	              //здесь не создаетс€ объект, а обь€вл€етс€ функци€ str4
+	String str5{};//явный вызов конструктора по умолчанию
+	cout << str5 << endl;
+	String str6{ "ѕараметры в конструктор можно передавать в фигурных скобках" };
+	cout << str6 << endl;
+	String str7 = str6;
+	cout << str7 << endl;
+	cout << str2 + " " + str3 << endl;
 
 }

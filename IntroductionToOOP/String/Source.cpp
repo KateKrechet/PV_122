@@ -30,7 +30,13 @@ public:
 	}
 	String(const char* str):String(strlen(str)+1)//Делегируем выделение памяти конструктору по умолчанию
 	{
-		for (int i = 0; i < size; i++)this->str[i] = str[i];
+		//for (int i = 0; i < size; i++)this->str[i] = str[i];
+		strcpy(this->str, str);
+		//strcpy - string copy
+		//strcpy(dat,src)
+		//dst(destination)-строка, в кот копируется содержимое
+		//src(source) - срока источник, строка, из которой копируется содержимое
+
 		cout << "Constructor:\t\t" << this << endl;
 	}
 	String(const String& other):String(other.str)
@@ -109,10 +115,20 @@ String operator+(const String& left, const String& right)
 		buffer.get_str()[i] = left.get_str()[i];
 	for (int i = 0; i < right.get_size(); i++)
 		buffer.get_str()[i + left.get_size() - 1] = right.get_str()[i];*/
-	for (int i = 0; i < left.get_size(); i++)
+	/*for (int i = 0; i < left.get_size(); i++)
 		buffer[i] = left[i];
 	for (int i = 0; i < right.get_size(); i++)
-		buffer[i + left.get_size() - 1] = right[i];
+		buffer[i + left.get_size() - 1] = right[i];*/
+
+	strcpy(buffer.get_str(), left.get_str());
+	strcat(buffer.get_str(), right.get_str());
+
+	//strcat - конкатенация строк
+	//strcat(dst/src);
+	//dst - строка получатель
+	//src - строка источник
+	//в dst будет объединенная строка
+
 
 	return buffer;
 }

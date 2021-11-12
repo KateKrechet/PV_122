@@ -26,28 +26,19 @@ public:
 	//Constructors
 	explicit String(int size = 80):size(size),str(new char[size]/*{}*/)
 	{
-		//this->size = size;
-		//this->str = new char[size] {};
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	String(const char* str):size(strlen(str)+1),str(new char[size]{})
+	String(const char* str):String(strlen(str)+1)//Делегируем выделение памяти конструктору по умолчанию
 	{
-		//this->size = strlen(str) + 1;
-		//this->str = new char[size] {};
 		for (int i = 0; i < size; i++)this->str[i] = str[i];
 		cout << "Constructor:\t\t" << this << endl;
 	}
-	String(const String& other):size(other.size),str(new char[size]{})
+	String(const String& other):String(other.str)
 	{   //Deep copy
-		//this->size = other.size;
-		//this->str = new char[size] {};
-		for (int i = 0; i < size; i++)this->str[i] = other.str[i];
 		cout << "CopyConstructor:\t" << this << endl;
 	}
 	String(String&& other):size(other.size),str(other.str)
 	{
-		//this->size = other.size;
-		//this->str = other.str;
 		cout << "MoveConstructor:\t" << this << endl;
 		other.str = nullptr;
 		other.size = 0;

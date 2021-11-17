@@ -51,11 +51,12 @@ public:
     }
     Matrix(Matrix&& other)
     {
-        *this = other;
+       /* *this = other;
         cout << "MoveConstructor:\t" << this << endl;
         arr = nullptr;
         rows = 0;
-        cols = 0;
+        cols = 0;*/
+        *this = std::move(other);
     }
     ~Matrix()
     {
@@ -90,10 +91,12 @@ public:
 
     Matrix& operator=(Matrix&& other)
     {
-        *this = other;
-        arr = nullptr;
-        rows = 0;
-        cols = 0;
+        this->rows = other.rows;
+        this->cols = other.cols;
+        this->arr = other.arr;
+        other.arr = nullptr;
+        other.rows = 0;
+        other.cols = 0;
         return *this;
 
     }
@@ -136,8 +139,9 @@ public:
 
 Matrix operator+(const Matrix& left, const Matrix& right)
 {
-    /*if ((left.get_cols() !=right.get_cols()) || (left.get_rows() != right.get_rows()))
-        return cout<<"Matrix must have same number of cols and rows.";*/
+    if ((left.get_cols() != right.get_cols()) || (left.get_rows() != right.get_rows()))
+        return Matrix();
+        //return cout<<"Matrix must have same number of cols and rows.";
 
     Matrix C(left.get_rows(), left.get_cols());
 

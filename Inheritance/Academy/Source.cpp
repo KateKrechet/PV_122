@@ -40,7 +40,7 @@ public:
 		set_age(age);
 		cout << "HConstructor:\t" <<this << endl;
 	}
-	~Human()
+	virtual~Human()
 	{
 		cout << "HDestructor\t" << this << endl;
 	}
@@ -240,5 +240,11 @@ void main()
 		group[i]->print();
 	}
 	cout << "----------------------------------------------\n";
-
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		delete[] group[i];
+	}
+	cout << sizeof(Human*)<<endl;//размер массива в байтах
+	cout << sizeof(group)<<endl;//размер 1 элемента массива в байтах
+	cout << sizeof(group) / sizeof(Human*) << endl;//так получаем, что выводить надо для 6 элементов массива
 }

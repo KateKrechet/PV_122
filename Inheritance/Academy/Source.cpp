@@ -1,4 +1,4 @@
-#include<iostream>
+ï»¿#include<iostream>
 #include<string>
 using namespace std;
 
@@ -42,12 +42,12 @@ public:
 	}
 	~Human()
 	{
-		cout << "Destructor\t" << this << endl;
+		cout << "HDestructor\t" << this << endl;
 	}
 	//Methods:
 	void print()const
 	{
-		cout << last_name << " " << first_name << " " << age << " ëåò.\n";
+		cout << last_name << " " << first_name << " " << age << " Ð»ÐµÑ‚.\n";
 	}
 };
 class Student :public Human
@@ -85,7 +85,7 @@ void set_rating(double rating)
 
 Student(const string& last_name,const string& first_name,unsigned int age,
 	    const string& speciality, const string& group, double rating)
-	:Human(last_name,first_name,age)//Äåëåãèðóåì êîíñòðóêòîð áàçîâîãî êëàññà
+	:Human(last_name,first_name,age)//Ð”ÐµÐ»ÐµÐ³Ð¸Ñ€ÑƒÐµÐ¼ ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ Ð±Ð°Ð·Ð¾Ð²Ð¾Ð³Ð¾ ÐºÐ»Ð°ÑÑÐ°
 {
 	set_speciality(speciality);
 	set_group(group);
@@ -101,7 +101,7 @@ Student(const string& last_name,const string& first_name,unsigned int age,
 void print()const
 {
 	Human::print();
-	cout << "Ñïåöèàëüíîñòü: " << speciality << " ,ãðóïïà: " << group << " ,óñïåâàåìîñòü: " << rating << endl;
+	cout << "Ð¡Ð¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ð¾ÑÑ‚ÑŒ: " << speciality << " ,Ð³Ñ€ÑƒÐ¿Ð¿Ð°: " << group << " ,ÑƒÑÐ¿ÐµÐ²Ð°ÐµÐ¼Ð¾ÑÑ‚ÑŒ: " << rating << endl;
 }
 };
 
@@ -143,17 +143,17 @@ public:
 		set_speciality(speciality);
 		set_experience(experience);
 		set_evil(evil);
-		cout << "SConstructor:\t" << this << endl;
+		cout << "TConstructor:\t" << this << endl;
 	}
 	~Teacher()
 	{
-		cout << "SDestructor:\t" << this << endl;
+		cout << "TDestructor:\t" << this << endl;
 	}
 	//Methods:
 	void print()const
 	{
 		Human::print();
-		cout << "Ñïåöèàëèçàöèÿ: " << speciality << " ,îïûò: " << experience << " ,ñòðîãîñòü: " << evil << endl;
+		cout << "Ð¡Ð¿ÐµÑ†Ð¸Ð°Ð»Ð¸Ð·Ð°Ñ†Ð¸Ñ: " << speciality << " ,Ð¾Ð¿Ñ‹Ñ‚: " << experience << " ,ÑÑ‚Ñ€Ð¾Ð³Ð¾ÑÑ‚ÑŒ: " << evil << endl;
 	}
 
 
@@ -191,17 +191,17 @@ public:
 	{
 		set_discipline(discipline);
 		set_name_of_project(name_of_project);
-		cout << "SConstructor:\t" << this << endl;
+		cout << "GConstructor:\t" << this << endl;
 	}
 	~Graduate()
 	{
-		cout << "SDestructor:\t" << this << endl;
+		cout << "GDestructor:\t" << this << endl;
 	}
 	//Methods:
 	void print()const
 	{
 		Student::print();
-		cout << "Äèñöèïëèíà: " << discipline << " ,òåìà äèïëîìíîãî ïðîåêòà: " <<name_of_project <<endl;
+		cout << "Ð”Ð¸ÑÑ†Ð¸Ð¿Ð»Ð¸Ð½Ð°: " << discipline << " ,Ñ‚ÐµÐ¼Ð° Ð´Ð¸Ð¿Ð»Ð¾Ð¼Ð½Ð¾Ð³Ð¾ Ð¿Ñ€Ð¾ÐµÐºÑ‚Ð°: " <<name_of_project <<endl;
 	}
 
 };

@@ -202,6 +202,7 @@ public:
 	{
 		Student::print();
 		cout << "Дисциплина: " << discipline << " ,тема дипломного проекта: " <<name_of_project <<endl;
+		
 	}
 
 };

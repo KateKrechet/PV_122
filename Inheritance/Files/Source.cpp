@@ -1,4 +1,4 @@
-#include<iostream>
+п»ї#include<iostream>
 #include<fstream>
 using namespace std;
 
@@ -10,11 +10,11 @@ void main()
 	setlocale(LC_ALL, " ");
 #ifdef WRITE_TO_FILE
 	//cout << "Hello World" << endl;
-	ofstream fout("File.txt", std::ios_base::app); //Создаем и открываем поток
+	ofstream fout("File.txt", std::ios_base::app); //РЎРѕР·РґР°РµРј Рё РѕС‚РєСЂС‹РІР°РµРј РїРѕС‚РѕРє
 	fout << "Hello World" << endl;
 	fout.close();
-	//system("notepad File.txt");// в блокноте
-	system("more File.txt");// в консоли  
+	//system("notepad File.txt");// РІ Р±Р»РѕРєРЅРѕС‚Рµ
+	system("more File.txt");// РІ РєРѕРЅСЃРѕР»Рё  
 #endif // WRITE_TO_FILE
 
 	const int SIZE = 256;
@@ -23,10 +23,10 @@ void main()
 	ifstream fin("File.txt");
 	if (fin.is_open())
 	{
-		while (!fin.eof())//пока не конец файла
+		while (!fin.eof())//РїРѕРєР° РЅРµ РєРѕРЅРµС† С„Р°Р№Р»Р°
 		{
 			//fin >> buffer;
-			fin.getline(buffer, SIZE);//вывод в точности как в файле
+			fin.getline(buffer, SIZE);//РІС‹РІРѕРґ РІ С‚РѕС‡РЅРѕСЃС‚Рё РєР°Рє РІ С„Р°Р№Р»Рµ
 			cout << buffer << endl;
 		}
 	}

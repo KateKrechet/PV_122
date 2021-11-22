@@ -1,4 +1,5 @@
 ﻿#include<iostream>
+#include<fstream>
 #include<string>
 using namespace std;
 
@@ -38,7 +39,7 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
-		cout << "HConstructor:\t" <<this << endl;
+		cout << "HConstructor:\t" << this << endl;
 	}
 	virtual~Human()
 	{
@@ -49,6 +50,13 @@ public:
 	{
 		cout << last_name << " " << first_name << " " << age << " лет.\n";
 	}
+	virtual void write()const
+	{
+		ofstream fout("File.txt", std::ios_base::app);
+		fout << last_name << " " << first_name << " " << age << " лет.\n";
+		fout.close();
+	}
+
 };
 class Student :public Human
 {
@@ -65,44 +73,51 @@ public:
 		return group;
 	}
 
-double get_rating()const
-{
-	return rating;
-}
-void set_speciality(const string& speciality)
-{
-	this->speciality = speciality;
-}
-void set_group(const string& group)
-{
-	this->group = group;
-}
-void set_rating(double rating)
-{
-	this->rating = rating;
-}
-//Constuctors:
+	double get_rating()const
+	{
+		return rating;
+	}
+	void set_speciality(const string& speciality)
+	{
+		this->speciality = speciality;
+	}
+	void set_group(const string& group)
+	{
+		this->group = group;
+	}
+	void set_rating(double rating)
+	{
+		this->rating = rating;
+	}
+	//Constuctors:
 
-Student(const string& last_name,const string& first_name,unsigned int age,
-	    const string& speciality, const string& group, double rating)
-	:Human(last_name,first_name,age)//Делегируем конструктор базового класса
-{
-	set_speciality(speciality);
-	set_group(group);
-	set_rating(rating);
-	cout << "SConstructor:\t" << this << endl;
-}
+	Student(const string& last_name, const string& first_name, unsigned int age,
+		const string& speciality, const string& group, double rating)
+		:Human(last_name, first_name, age)//Делегируем конструктор базового класса
+	{
+		set_speciality(speciality);
+		set_group(group);
+		set_rating(rating);
+		cout << "SConstructor:\t" << this << endl;
+	}
 
-~Student()
-{
-	cout << "SDestructor:\t" << this << endl;
-}
-//Methods:
-void print()const
-{
-	Human::print();
-	cout << "Специальность: " << speciality << " ,группа: " << group << " ,успеваемость: " << rating << endl;
-}
+	~Student()
+	{
+		cout << "SDestructor:\t" << this << endl;
+	}
+	//Methods:
+	void print()const
+	{
+		Human::print();
+		cout << "Специальность: " << speciality << " ,группа: " << group << " ,успеваемость: " << rating << endl;
+	}
+	void write()const
+	{
+		Human::write();
+		ofstream fout("File.txt", std::ios_base::app);
+		fout << "Специальность: " << speciality << " ,группа: " << group << " ,успеваемость: " << rating << endl;
+		fout.close();
+	}
 };
 
 class Teacher : public Human
@@ -120,7 +135,7 @@ public:
 		return experience;
 	}
 	double get_evil()const
-	{ 
+	{
 		return evil;
 	}
 	void set_speciality(const string& speciality)
@@ -133,9 +148,9 @@ public:
 	}
 	void set_evil(double evil)
 	{
-		this->evil=evil;
+		this->evil = evil;
 	}
-//Constructors:
+	//Constructors:
 	Teacher(const string& last_name, const string& first_name, unsigned int age,
 		const string& speciality, unsigned int experience, double evil)
 		:Human(last_name, first_name, age)
@@ -155,6 +170,13 @@ public:
 		Human::print();
 		cout << "Специализация: " << speciality << " ,опыт: " << experience << " ,строгость: " << evil << endl;
 	}
+	void write()const
+	{
+		Human::write();
+		ofstream fout("File.txt", std::ios_base::app);
+		fout << "Специализация: " << speciality << " ,опыт: " << experience << " ,строгость: " << evil << endl;
+		fout.close();
+	}
 
 
 };
@@ -163,7 +185,7 @@ class Graduate :public Student
 {
 	string  discipline;
 	string name_of_project;
-	
+
 public:
 	const string& get_discipline()const
 	{
@@ -181,13 +203,13 @@ public:
 	{
 		this->name_of_project = name_of_project;
 	}
-	
+
 	//Constructors:
 	Graduate(const string& last_name, const string& first_name, unsigned int age,
 		const string& speciality, const string& group, double rating,
 		const string& discipline, const string& name_of_project)
 
-		:Student(last_name,first_name,age,speciality,group,rating)
+		:Student(last_name, first_name, age, speciality, group, rating)
 	{
 		set_discipline(discipline);
 		set_name_of_project(name_of_project);
@@ -201,13 +223,23 @@ public:
 	void print()const
 	{
 		Student::print();
-		cout << "Дисциплина: " << discipline << " ,тема дипломного проекта: " <<name_of_project <<endl;
-		
+		cout << "Дисциплина: " << discipline << " ,тема дипломного проекта: " << name_of_project << endl;
+
+	}
+	void write()const
+	{
+		Student::write();
+		ofstream fout("File.txt", std::ios_base::app);
+		fout << "Дисциплина: " << discipline << " ,тема дипломного проекта: " << name_of_project << endl;
+		fout.close();
+
 	}
 
 };
 
 //#define INHERITANCE
+//#define POLIMORPHISM
+#define WRITE_TO_FILE
 
 void main()
 {
@@ -225,6 +257,7 @@ void main()
 	Graduate g("Ivanova", "Larisa", 22, "AS", "AS-05", 90, "Automatical Systems", "Module of online store");
 	g.print();
 #endif // INHERITANCE
+#ifdef POLIMORPHISM
 	//Generalisation
 	Human* group[] =
 	{
@@ -245,7 +278,37 @@ void main()
 	{
 		delete[] group[i];
 	}
-	cout << sizeof(Human*)<<endl;//размер массива в байтах
-	cout << sizeof(group)<<endl;//размер 1 элемента массива в байтах
-	cout << sizeof(group) / sizeof(Human*) << endl;//так получаем, что выводить надо для 6 элементов массива
+
+
+	/*	cout << sizeof(Human*) << endl;//размер массива в байтах
+		cout << sizeof(group) << endl;//размер 1 элемента массива в байтах
+		cout << sizeof(group) / sizeof(Human*) << endl;//так получаем, что выводить надо для 6 элементов массива*/
+#endif // POLIMORPHISM
+
+#ifdef WRITE_TO_FILE
+	Human* group[] =
+	{
+		new Student("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 98),//upcast
+		new Student("Vercetti","Tomas",30,"Criminal","Vice",90), // upcast
+		new Teacher("Ivanov", "Ivan", 35, "1C", 8, 7.5), // upcast
+		new Student("Diaz","Ricardo",55,"Weapons istribution","Vice",80),
+		new Graduate("Ivanova", "Larisa", 22, "AS", "AS-05", 90, "Automatical Systems", "Module of online store"),
+		new Teacher("Eistein","Albert",143,"Astronomy",120,10)
+	};
+
+	ofstream fout("File.txt", std::ios_base::app); //Создаем и открываем поток
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		group[i]->write();
+	}
+	cout << "----------------------------------------------\n";
+
+	system("notepad File.txt");// в блокноте
+	//system("more File.txt");// в консоли  
+	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
+	{
+		delete[] group[i];
+	}
+#endif // WRITE_TO_FILE
+
 }

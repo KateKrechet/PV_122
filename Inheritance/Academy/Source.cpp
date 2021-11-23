@@ -1,6 +1,7 @@
 ﻿#include<iostream>
 #include<fstream>
 #include<string>
+#include<Windows.h>
 using namespace std;
 
 class Human
@@ -244,6 +245,7 @@ public:
 void main()
 {
 	setlocale(LC_ALL, "Russian");
+
 #ifdef INHERITANCE
 	Human h("Montana", "Antonio", 35);
 	h.print();
@@ -257,6 +259,7 @@ void main()
 	Graduate g("Ivanova", "Larisa", 22, "AS", "AS-05", 90, "Automatical Systems", "Module of online store");
 	g.print();
 #endif // INHERITANCE
+
 #ifdef POLIMORPHISM
 	//Generalisation
 	Human* group[] =
@@ -286,6 +289,8 @@ void main()
 #endif // POLIMORPHISM
 
 #ifdef WRITE_TO_FILE
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	Human* group[] =
 	{
 		new Student("Pinkman", "Jessie", 22, "Chemistry", "WW_01", 98),//upcast

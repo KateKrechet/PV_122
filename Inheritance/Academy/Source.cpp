@@ -47,9 +47,9 @@ public:
 		cout << "HDestructor\t" << this << endl;
 	}
 	//Methods:
-	virtual void print()const
+	virtual ostream& print(ostream& os)const
 	{
-		cout << last_name << " " << first_name << " " << age << " лет.\n";
+		return os << last_name << " " << first_name << " " << age << " лет. ";
 	}
 	virtual void write()const
 	{
@@ -59,6 +59,11 @@ public:
 	}
 
 };
+ostream& operator<<(ostream& os, const Human& obj)
+{
+	return obj.print(os);
+	
+}
 class Student :public Human
 {
 	string speciality;
@@ -107,10 +112,10 @@ public:
 		cout << "SDestructor:\t" << this << endl;
 	}
 	//Methods:
-	void print()const
+	ostream& print(ostream& os)const
 	{
-		Human::print();
-		cout << "Специальность: " << speciality << " ,группа: " << group << " ,успеваемость: " << rating << endl;
+		Human::print(os);
+		return os << "Специальность: " << speciality << " ,группа: " << group << " ,успеваемость: " << rating;
 	}
 	void write()const
 	{
@@ -166,16 +171,16 @@ public:
 		cout << "TDestructor:\t" << this << endl;
 	}
 	//Methods:
-	void print()const
+	ostream& print(ostream& os)const
 	{
-		Human::print();
-		cout << "Специализация: " << speciality << " ,опыт: " << experience << " ,строгость: " << evil << endl;
+		Human::print(os);
+		return os << "Специализация: " << speciality << " ,опыт: " << experience << " ,строгость: " << evil;
 	}
 	void write()const
 	{
 		Human::write();
 		ofstream fout("File.txt", std::ios_base::app);
-		fout << "Специализация: " << speciality << " ,опыт: " << experience << " ,строгость: " << evil << endl;
+		fout << "Специализация: " << speciality << " ,опыт: " << experience << " ,строгость: " << evil;
 		fout.close();
 	}
 
@@ -221,10 +226,10 @@ public:
 		cout << "GDestructor:\t" << this << endl;
 	}
 	//Methods:
-	void print()const
+	ostream& print(ostream& os)const
 	{
-		Student::print();
-		cout << "Дисциплина: " << discipline << " ,тема дипломного проекта: " << name_of_project << endl;
+		Student::print(os);
+		return os << " Дисциплина: " << discipline << " ,тема дипломного проекта: " << name_of_project;
 
 	}
 	void write()const
@@ -239,8 +244,8 @@ public:
 };
 
 //#define INHERITANCE
-//#define POLIMORPHISM
-#define WRITE_TO_FILE
+#define POLIMORPHISM
+//#define WRITE_TO_FILE
 
 void main()
 {
@@ -274,7 +279,8 @@ void main()
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
 		cout << "----------------------------------------------\n";
-		group[i]->print();
+		//group[i]->print();
+		cout << *group[i] << endl;
 	}
 	cout << "----------------------------------------------\n";
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
@@ -313,7 +319,7 @@ void main()
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
 		delete[] group[i];
-	}
+}
 #endif // WRITE_TO_FILE
 
 }

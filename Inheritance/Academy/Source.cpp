@@ -291,7 +291,8 @@ ostream& operator<<(ostream& os, const Graduate& obj)
 
 //#define INHERITANCE
 //#define POLIMORPHISM
-#define ACADEMY_STREAMS_HARDCOR
+#define ACADEMY_STREAMS_HARDCORE
+
 
 void main()
 
@@ -340,7 +341,7 @@ void main()
 		cout << sizeof(group) / sizeof(Human*) << endl;//так получаем, что выводить надо для 6 элементов массива*/
 #endif // POLIMORPHISM
 
-#ifdef ACADEMY_STREAMS_HARDCOR
+#ifdef ACADEMY_STREAMS_HARDCORE
 
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
@@ -371,6 +372,6 @@ void main()
 	{
 		delete[] group[i];
 	}
-#endif // WRITE_TO_FILE
+#endif // ACADEMY_STREAMS_HARDCORE
 
 }

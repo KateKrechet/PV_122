@@ -115,7 +115,7 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		return os << "Специальность: " << speciality << " ,группа: " << group << " ,успеваемость: " << rating;
+		return os << /*Специальность:*/" " << speciality << /*" ,группа:*/" " << group << " "<</*,успеваемость:*/" " << rating;
 	}
 	void write()const
 	{
@@ -174,7 +174,7 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		return os << "Специализация: " << speciality << " ,опыт: " << experience << " ,строгость: " << evil;
+		return os << /*Специализация:*/" " << speciality << " "/*,опыт:*/<<" " << experience << " "/*,строгость:*/<<" " << evil;
 	}
 	void write()const
 	{
@@ -229,7 +229,7 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Student::print(os);
-		return os << " Дисциплина: " << discipline << " ,тема дипломного проекта: " << name_of_project;
+		return os << /*Дисциплина:*/" " << discipline << " "/*,тема дипломного проекта:*/<<" " << name_of_project;
 
 	}
 	void write()const
@@ -283,6 +283,15 @@ void main()
 		cout << *group[i] << endl;
 	}
 	cout << "----------------------------------------------\n";
+
+	ofstream fout("group.txt");
+	for(int i=0;i<sizeof(group)/sizeof(group[0]);i++)
+	{
+		fout << *group[i] << endl;
+	}
+	fout.close();
+	system("notepad group.txt");
+
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
 		delete[] group[i];

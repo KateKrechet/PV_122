@@ -3,6 +3,7 @@
 #include<string>
 #include<Windows.h>
 using namespace std;
+//#define DEBUG
 
 class Human
 {
@@ -40,11 +41,17 @@ public:
 		set_last_name(last_name);
 		set_first_name(first_name);
 		set_age(age);
+#ifdef DEBUG
 		cout << "HConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	virtual~Human()
 	{
+#ifdef DEBUG
 		cout << "HDestructor\t" << this << endl;
+#endif // DEBUG
+
 	}
 	//Methods:
 	virtual void print()const
@@ -59,6 +66,12 @@ public:
 	}
 
 };
+ostream& operator<<(ostream& os, const Human& obj)
+{
+	return os << obj.get_last_name() << " " <<
+		obj.get_first_name() << " " <<
+		obj.get_age() << " лет."<<endl;
+}
 class Student :public Human
 {
 	string speciality;
@@ -99,12 +112,18 @@ public:
 		set_speciality(speciality);
 		set_group(group);
 		set_rating(rating);
+#ifdef DEBUG
 		cout << "SConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 
 	~Student()
 	{
+#ifdef DEBUG
 		cout << "SDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	//Methods:
 	void print()const
@@ -120,6 +139,13 @@ public:
 		fout.close();
 	}
 };
+ostream& operator<<(ostream& os, const Student& obj)
+{
+	os << (Human)obj;
+	return os <<"Специальность: " << obj.get_speciality() 
+		<< " ,группа: " << obj.get_group() 
+		<< " ,успеваемость: " << obj.get_rating() << endl;
+}
 
 class Teacher : public Human
 {
@@ -127,7 +153,7 @@ class Teacher : public Human
 	unsigned int experience;
 	double evil;
 public:
-	const string& get_peciality()const
+	const string& get_speciality()const
 	{
 		return speciality;
 	}
@@ -159,11 +185,17 @@ public:
 		set_speciality(speciality);
 		set_experience(experience);
 		set_evil(evil);
+#ifdef DEBUG
 		cout << "TConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Teacher()
 	{
+#ifdef DEBUG
 		cout << "TDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	//Methods:
 	void print()const
@@ -181,6 +213,13 @@ public:
 
 
 };
+
+ostream& operator<<(ostream& os, const Teacher& obj)
+{
+		return os <<(Human)obj<< "Специализация: " << obj.get_speciality()
+		<< " ,опыт: " << obj.get_experience ()
+		<< " ,строгость: " << obj.get_evil() << endl;
+}
 
 class Graduate :public Student
 {
@@ -214,11 +253,17 @@ public:
 	{
 		set_discipline(discipline);
 		set_name_of_project(name_of_project);
+#ifdef DEBUG
 		cout << "GConstructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	~Graduate()
 	{
+#ifdef DEBUG
 		cout << "GDestructor:\t" << this << endl;
+#endif // DEBUG
+
 	}
 	//Methods:
 	void print()const
@@ -238,11 +283,18 @@ public:
 
 };
 
+ostream& operator<<(ostream& os, const Graduate& obj)
+{
+	return os <<(Student)obj<< "Дисциплина: " << obj.get_discipline()
+		<< " ,тема дипломного проекта: " << obj.get_name_of_project() << endl;
+}
+
 //#define INHERITANCE
 //#define POLIMORPHISM
-#define WRITE_TO_FILE
+#define ACADEMY_STREAMS_HARDCOR
 
 void main()
+
 {
 	setlocale(LC_ALL, "Russian");
 
@@ -288,7 +340,8 @@ void main()
 		cout << sizeof(group) / sizeof(Human*) << endl;//так получаем, что выводить надо для 6 элементов массива*/
 #endif // POLIMORPHISM
 
-#ifdef WRITE_TO_FILE
+#ifdef ACADEMY_STREAMS_HARDCOR
+
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	Human* group[] =
@@ -301,15 +354,19 @@ void main()
 		new Teacher("Eistein","Albert",143,"Astronomy",120,10)
 	};
 
-	ofstream fout("File.txt", std::ios_base::app); //Создаем и открываем поток
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
-		group[i]->write();
+		cout << "----------------------------------------------\n";
+		//cout << *group[i] << endl;
+		//cout << typeid(*group[i]).name() << endl;
+		if (typeid(*group[i]) == typeid(Student))
+			cout<<*dynamic_cast<Student*>(group[i]) << endl;//вернет указатель на студента
+		if (typeid(*group[i]) == typeid(Graduate))
+			cout << *dynamic_cast<Graduate*>(group[i]) << endl;
+		if (typeid(*group[i]) == typeid(Teacher))
+			cout << *dynamic_cast<Teacher*>(group[i]) << endl;
 	}
 	cout << "----------------------------------------------\n";
-
-	system("notepad File.txt");// в блокноте
-	//system("more File.txt");// в консоли  
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
 		delete[] group[i];

@@ -2,6 +2,7 @@
 #include<fstream>
 #include<string>
 #include<Windows.h>
+#include<iomanip>
 using namespace std;
 
 class Human
@@ -49,7 +50,8 @@ public:
 	//Methods:
 	virtual ostream& print(ostream& os)const
 	{
-		return os << last_name << " " << first_name << " " << age << " лет. ";
+		return os <<left << setw(10)<<last_name << left << setw(10) << first_name<< left << setw(4)<<age;
+		//return os<<last_name << " " << first_name << " " << age << " ";
 	}
 	virtual void write()const
 	{
@@ -62,7 +64,7 @@ public:
 ostream& operator<<(ostream& os, const Human& obj)
 {
 	return obj.print(os);
-	
+
 }
 class Student :public Human
 {
@@ -115,7 +117,8 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		return os << /*Специальность:*/" " << speciality << /*" ,группа:*/" " << group << " "<</*,успеваемость:*/" " << rating;
+		//return os << /*Специальность:*/" " << speciality << /*" ,группа:*/" " << group << " " <</*,успеваемость:*/" " << rating;
+		return os << left << setw(20) << speciality << left << setw(10) << group << left << setw(4)<< rating;
 	}
 	void write()const
 	{
@@ -174,7 +177,8 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Human::print(os);
-		return os << /*Специализация:*/" " << speciality << " "/*,опыт:*/<<" " << experience << " "/*,строгость:*/<<" " << evil;
+		//return os << /*Специализация:*/" " << speciality << " "/*,опыт:*/ << " " << experience << " "/*,строгость:*/ << " " << evil;
+		return os << left << setw(30) << speciality << left << setw(4) << experience << evil;
 	}
 	void write()const
 	{
@@ -229,7 +233,8 @@ public:
 	ostream& print(ostream& os)const
 	{
 		Student::print(os);
-		return os << /*Дисциплина:*/" " << discipline << " "/*,тема дипломного проекта:*/<<" " << name_of_project;
+		//return os << /*Дисциплина:*/" " << discipline << " "/*,тема дипломного проекта:*/ << " " << name_of_project;
+		return os << left << setw(10) << discipline << name_of_project;
 
 	}
 	void write()const
@@ -285,7 +290,7 @@ void main()
 	cout << "----------------------------------------------\n";
 
 	ofstream fout("group.txt");
-	for(int i=0;i<sizeof(group)/sizeof(group[0]);i++)
+	for (int i = 0; i < sizeof(group) / sizeof(group[0]); i++)
 	{
 		fout << *group[i] << endl;
 	}
@@ -328,7 +333,7 @@ void main()
 	for (int i = 0; i < sizeof(group) / sizeof(Human*); i++)
 	{
 		delete[] group[i];
-}
+	}
 #endif // WRITE_TO_FILE
 
 }

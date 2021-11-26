@@ -73,13 +73,13 @@ public:
 		os << typeid(*this).name() << "|";
 		os.width(10);
 		os << std::left;
-		os << last_name<<"|";
+		os << last_name << "|";
 		os.width(10);
 		os << std::left;
-		os << first_name<<"|";
+		os << first_name << "|";
 		os.width(5);
 		os << std::left;
-		os << age<<"|";
+		os << age << "|";
 		return os;
 
 	}
@@ -92,6 +92,15 @@ public:
 	virtual istream& input(istream& is)
 	{
 		return is >> last_name >> first_name >> age;
+	}
+	virtual ifstream& input(ifstream& is)
+	{
+		std::getline(is, last_name, '|');//чтение до верт черты
+		std::getline(is, first_name, '|');
+		string age_buffer;
+		std::getline(is, age_buffer, '|');
+		this->age = std::stoi(age_buffer);//преобразует строку в число
+		return is;
 	}
 };
 ostream& operator<<(ostream& os, const Human& obj)
@@ -112,9 +121,14 @@ istream& operator>>(istream& is, Human& obj)
 	obj.set_last_name(last_name);
 	obj.set_first_name(first_name);
 	obj.set_age(age);
-	return is; реализация без виртуального метода*/ 
+	return is; реализация без виртуального метода*/
 	return obj.input(is);
 
+}
+
+ifstream& operator>>(ifstream& is, Human& obj)
+{
+	return obj.input(is);
 }
 class Student :public Human
 {
@@ -168,12 +182,12 @@ public:
 	{
 		Human::print(os);
 		//return os << /*Специальность:*/" " << speciality << /*" ,группа:*/" " << group << " " <</*,успеваемость:*/" " << rating;
-		return os << left << setw(25) << speciality << left << setw(10) << group << right << setw(4)<< rating<<"%";
+		return os << left << setw(25) << speciality << left << setw(10) << group << right << setw(4) << rating << "%";
 	}
 	ofstream& print(ofstream& os)const
 	{
 		Human::print(os);
-		os << left << setw(25); 
+		os << left << setw(25);
 		os << speciality << "|";
 		os << left << setw(10);
 		os << group << "|";
@@ -196,6 +210,17 @@ public:
 		is >> rating;
 		return is;
 	}
+	ifstream& input(ifstream& is)
+	{
+		Human::input(is);
+		std::getline(is,speciality,'|');
+		std::getline(is,group,'|');
+		string rating_buffer;
+		std::getline(is, rating_buffer,'|');
+		this->rating = std::stod(rating_buffer);
+		return is;
+	}
+
 };
 
 class Teacher : public Human
@@ -247,7 +272,7 @@ public:
 	{
 		Human::print(os);
 		//return os << /*Специализация:*/" " << speciality << " "/*,опыт:*/ << " " << experience << " "/*,строгость:*/ << " " << evil;
-		return os << left << setw(35) << speciality << right << setw(4) << experience <<"y"<<" "<< left << setw(4) << evil;
+		return os << left << setw(35) << speciality << right << setw(4) << experience << "y" << " " << left << setw(4) << evil;
 	}
 
 	ofstream& print(ofstream& os)const
@@ -257,8 +282,21 @@ public:
 		os << speciality << " | ";
 		os << right << setw(4);
 		os << experience << "y" << "|";
-		os<< " " << left << setw(4) << evil;
+		os << " " << left << setw(4) << evil;
 		return os;
+	}
+
+	ifstream& input(ifstream& is)
+	{
+		Human::input(is);
+		std::getline(is, speciality,'|');
+		string xp_buffer;
+		std::getline(is, xp_buffer,'|');
+		experience = std::stod(xp_buffer);
+		string evil_buffer;
+		std::getline(is, evil_buffer);
+		evil = std::stod(evil_buffer);
+		return is;
 	}
 	void write()const
 	{
@@ -314,15 +352,23 @@ public:
 	{
 		Student::print(os);
 		//return os << /*Дисциплина:*/" " << discipline << " "/*,тема дипломного проекта:*/ << " " << name_of_project;
-		return os << left <<  " "<<discipline <<name_of_project;
+		return os << left << " " << discipline << name_of_project;
 
 	}
 	ofstream& print(ofstream& os)const
 	{
 		Student::print(os);
 		//return os << /*Дисциплина:*/" " << discipline << " "/*,тема дипломного проекта:*/ << " " << name_of_project;
-		os << left << " " << discipline <<"|"<< name_of_project;
+		os << left << " " << discipline << "|" << name_of_project;
 		return os;
+	}
+
+	ifstream& input(ifstream& is)
+	{
+		Student::input(is);
+		std::getline(is, discipline, '|');
+		std::getline(is, name_of_project);
+		return is;
 	}
 	void write()const
 	{
@@ -335,8 +381,10 @@ public:
 
 };
 
-void SaveToFile(const Human* group[],const int size, const string& filename);
+void SaveToFile(Human* group[], const int size, const string& filename);
+void Print(Human* group[], const int size);
 Human** LoadFromFile(const std::string& filename);
+Human* HumanFactory(const std::string& human_type);
 
 //#define INHERITANCE
 //#define POLIMORPHISM
@@ -438,14 +486,15 @@ void main()
 	cout << "Кто к нам пришел: ";
 	cin >> human;
 	cout << human << endl;*/
-	
+
 	/*Student stud("", "", 0, "", "", 0);
 	cout << "Кто к нам пришел: ";
 	cin >> stud;
 	cout << stud << endl;*/
-	LoadFromFile("group.txt");
+	Human**group=LoadFromFile("group.txt");
+	Print(group, 6);
 }
-void SaveToFile(const Human* group[], const int size, const string& filename)
+void SaveToFile(Human* group[], const int size, const string& filename)
 {
 	ofstream fout(filename);
 	for (int i = 0; i < size; i++)
@@ -453,6 +502,14 @@ void SaveToFile(const Human* group[], const int size, const string& filename)
 		fout << *group[i] << endl;
 	}
 	fout.close();
+
+}
+void Print(Human* group[], const int size)
+{
+	for (int i = 0; i < size; i++)
+	{
+		cout << *group[i] << endl;
+	}
 	
 }
 
@@ -474,20 +531,33 @@ Human** LoadFromFile(const std::string& filename)
 		Human** group = new Human * [n] {};
 		//3)возвращаем курсор в начало файла для того, чтобы заново его прочитать
 		fin.clear();//очистка потока
-		fin.seekg(ios::beg,0);
+		fin.seekg(ios::beg, 0);
 		cout << fin.tellg() << endl;
 		//4)заново читаем файл и загружаем его содержимое в массив объектов
-		for (int i = 0; i < n; i++)
+		string human_type;
+		for (int i = 0; i<n; i++)
 		{
-			std::getline(fin, buffer);
-			cout << buffer << endl;
+			std::getline(fin, human_type,'|');
+			group[i] = HumanFactory(human_type);
+			fin >> *group[i];
+			cout << *group[i];
+			//cout << buffer << endl;
 		}
 
 		fin.close();
+		return group;
 	}
 	else
 	{
 		cerr << "Error: File not found!" << endl;
 	}
 	return nullptr;//если файл прочитать не удалось, возвращаем указатель на 0
+}
+
+Human* HumanFactory(const std::string& human_type)
+{
+	if (human_type.find("class Student")!=string::npos) return new Student("last_name", "first_name", 0, "spec", "gr", 0);
+	if (human_type.find("class Graduate") != string::npos) return new Graduate("last_name", "first_name", 0, "spec", "gr", 0, "subj", "diploma");
+	if (human_type.find("class Teacher") != string::npos) return new Teacher("last_name", "first_name", 0, "spec", 0, 0);
+	return nullptr;
 }

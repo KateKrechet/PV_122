@@ -406,7 +406,7 @@ istream& operator>>(istream& is, Fraction& obj)
 }
 //#define CONSTRUCTORS_CHECK
 //#define OSTREAM_CHECR
-//#define ISTREAM CHECK
+#define ISTREAM_CHECK
 //#define ARITHMETICAL_OPERATORS_CHECK
 //#define COMPARISON_OPERATORS
 //#define TYPE_CONVERSION_BASICS
@@ -519,14 +519,14 @@ void main()
 	cout << b << endl;
 #endif // CONVERSION_TO_OTHER_FROM_CLASS
 
-	Fraction A = 2.76;
+	/*Fraction A = 2.76;
 	cout << A << endl;
 	Fraction B(2, 76, 100);
 	cout << B << endl;
 	cout << (A == B) << endl;
 
 	Fraction C(1, 3);
-	cout << C*3 << endl;
+	cout << C*3 << endl;*/
 }
 int nod(int a, int b)
 {

@@ -1,0 +1,6 @@
+Pinkman   Jessie    35   Manager              80000
+Tomilina  Svetlana  30   Paymaster            40000
+Ivanova   Larisa    30   Paymaster            40000
+Sidorov   Kirill    22   Waiter               60000
+Guravleva Svetlana  20   Waiter               45000
+Komarov   Alexey    21   Waiter               45000

@@ -1,17 +1,17 @@
-#include<iostream>
+п»ї#include<iostream>
 using std::cin;
 using std::cout;
 using std::endl;
 
 enum Color
 {
-	console_gray = 0x88,//16-ричный код цвета
+	console_gray = 0x88,//16-СЂРёС‡РЅС‹Р№ РєРѕРґ С†РІРµС‚Р°
 	console_blue = 0x99,
 	console_green = 0xAA,
 	console_red = 0xCC,
 	console_white = 0xFF
 };
-//enum - набор именованных констант типа int
+//enum - РЅР°Р±РѕСЂ РёРјРµРЅРѕРІР°РЅРЅС‹С… РєРѕРЅСЃС‚Р°РЅС‚ С‚РёРїР° int
 class Shape
 {
 	Color color;
@@ -77,8 +77,8 @@ void main()
 {
 	setlocale(LC_ALL, "Russian");
 	Square square(5, Color::console_red);
-	cout << "Площадь квадрата: " << square.get_area() << endl;
-	cout<< "Периметр квадрата: " << square.get_perimeter() << endl;
+	cout << "РџР»РѕС‰Р°РґСЊ РєРІР°РґСЂР°С‚Р°: " << square.get_area() << endl;
+	cout<< "РџРµСЂРёРјРµС‚СЂ РєРІР°РґСЂР°С‚Р°: " << square.get_perimeter() << endl;
 	square.draw();
 	
 }

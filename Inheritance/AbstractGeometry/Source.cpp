@@ -2,6 +2,7 @@
 #include<conio.h>
 #include<math.h>
 #include<Windows.h>
+#include<thread>
 using std::cin;
 using std::cout;
 using std::endl;
@@ -194,6 +195,14 @@ namespace Geometry
 			//чтобы освободить занимаемые ими ресурсы
 			ReleaseDC(hwnd, hdc);
 		}
+
+		void start_draw()const
+		{
+			while (true)
+			{
+				draw();
+			}
+		}
 	};
 
 	class Circle :public Shape
@@ -314,8 +323,13 @@ namespace Geometry
 		{
 
 		}
-
-
+		void start_draw()const
+		{
+			while (true)
+			{
+				draw();
+			}
+		}
 	};
 }
 
@@ -388,11 +402,13 @@ void main()
 	rect1.draw();*/
 	cout << rect1.get_area() << endl;
 	cout << rect1.get_perimeter() << endl;
-	while (key != ' ')
+	/*while (key != ' ')
 	{
 		rect1.draw();
 		if (_kbhit())key = _getch();
-	}
+	}*/
+	
+	std::thread rect1_thread(&Geometry::Rectangle::start_draw,rect1);
 
 	/*Geometry::Circle elip(100, Geometry::Color::red, 5, 200, 400);
 	cout << "Площадь круга: " << elip.get_area() << endl;
@@ -405,14 +421,17 @@ void main()
 	cout << et.get_perimeter() << endl;
 	//cin.get();
 	key = 0;
-	while (key != ' ')
+	/*while (key != ' ')
 	{
 		et.draw();
 		if (_kbhit())key = _getch();
-	}
+	}*/
+
+std::thread et_thread(&Geometry::EquilateralTriangle::start_draw, et);
 	//Sleep(10000);
 	//cin.get();
-
+	et_thread.join();
+	rect1_thread.join();
 	/*Triangle triangle(5, Color::console_red);
 	cout << "Площадь треугольника: " << triangle.get_area() << endl;
 	cout << "Периметр треугольника: " << triangle.get_perimeter() << endl;

@@ -1,4 +1,5 @@
 ﻿#include<iostream>
+#include<conio.h>
 #include<math.h>
 #include<Windows.h>
 using std::cin;
@@ -20,7 +21,8 @@ namespace Geometry
 		green = 0x0000FF00,
 		dark_green = 0x0000A000,
 		blue = 0x00FF0000,
-		yellow = 0x0000FFFF
+		yellow = 0x0000FFFF,
+		white = 0x00FFFFFF
 
 	};
 	//enum - набор именованных констант типа int
@@ -240,9 +242,24 @@ namespace Geometry
 			ReleaseDC(hwnd, hdc);
 		}
 	};
-}
 
-	/*class Triangle :public Shape
+	class Triangle :public Shape
+	{//абстрактный класс, так как треугольники могут быть разных видов
+	public:
+		Triangle(Color color, unsigned int width, unsigned int start_x,
+			unsigned int start_y) :Shape(color, width, start_x, start_y)
+		{
+
+		}
+		~Triangle()
+		{
+
+		}
+		virtual double get_height()const = 0;//у каждого треугольника есть высота
+
+	};
+
+	class EquilateralTriangle :public Triangle
 	{
 		double side;
 	public:
@@ -250,23 +267,19 @@ namespace Geometry
 		{
 			return side;
 		}
+		double get_height()const
+		{
+			return sqrt(pow(side, 2) - pow(side / 2, 2));
+		}
 
 		void set_side(double side)
 		{
-			if (side <= 0) side = 1;
+			if (side <= 0)side = 1;
 			this->side = side;
-		}
-		Triangle(double side, Color color) :Shape(color)
-		{
-			set_side(side);
-		}
-		~Triangle()
-		{
-
 		}
 		double get_area()const
 		{
-			return pow(side, 2) / 2;
+			return side * side * sqrt(3) / 4;
 		}
 		double get_perimeter()const
 		{
@@ -274,50 +287,137 @@ namespace Geometry
 		}
 		void draw()const
 		{
-			for (int i = 0; i < side; i++)
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, width, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+			const POINT points[] =
 			{
-				for (int j = 0; j <= i; j++)
-				{
-					cout << "*";
-				}
-				cout << endl;
-			}
+				{start_x,start_y + this->get_height()},
+				{start_x + side,start_y + this->get_height()},
+				{start_x + side / 2,start_y}
+			};
+			Polygon(hdc, points, sizeof(points) / sizeof(POINT));
+			DeleteObject(hBrush);
+			DeleteObject(hPen);
+			ReleaseDC(hwnd, hdc);
 
 		}
+		EquilateralTriangle(double side, Color color = Color::white, unsigned int width = 5, unsigned int start_x = 100,
+			unsigned int start_y = 100) :Triangle(color, width, start_x, start_y)
+		{
+			set_side(side);
+		}
+		~EquilateralTriangle()
+		{
+
+		}
+
+
 	};
+}
+
+
+
+/*class Triangle :public Shape
+{
+	double side;
+public:
+	double get_side()const
+	{
+		return side;
+	}
+
+	void set_side(double side)
+	{
+		if (side <= 0) side = 1;
+		this->side = side;
+	}
+	Triangle(double side, Color color) :Shape(color)
+	{
+		set_side(side);
+	}
+	~Triangle()
+	{
+
+	}
+	double get_area()const
+	{
+		return pow(side, 2) / 2;
+	}
+	double get_perimeter()const
+	{
+		return side * 3;
+	}
+	void draw()const
+	{
+		for (int i = 0; i < side; i++)
+		{
+			for (int j = 0; j <= i; j++)
+			{
+				cout << "*";
+			}
+			cout << endl;
+		}
+
+	}
+};
 
 }*/
 
-	void main()
-	{//вывод изображения на полный экран
-		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		COORD buffer = { 80,50 };
-		SetConsoleDisplayMode(hConsole, CONSOLE_FULLSCREEN, &buffer);
-		system("pause");
+void main()
+{//вывод изображения на полный экран
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD buffer = { 80,50 };
+	SetConsoleDisplayMode(hConsole, CONSOLE_FULLSCREEN, &buffer);
+	//system("pause");
 
 
 
-		setlocale(LC_ALL, "Russian");
-		/*Geometry::Square square(5, Geometry::Color::console_red);
-		cout << "Площадь квадрата: " << square.get_area() << endl;
-		cout << "Периметр квадрата: " << square.get_perimeter() << endl;
-		square.draw();*/
-
-		/*Geometry::Rectangle rect1(100, 400, Geometry::Color::yellow, 5, 200, 400);
-		cout << "Площадь прямоугольника: " << rect1.get_area() << endl;
-		cout << "Периметр прямоугольника: " << rect1.get_perimeter() << endl;
-		rect1.draw();*/
-
-		Geometry::Circle elip(100, Geometry::Color::red, 5, 200, 400);
-		cout << "Площадь круга: " << elip.get_area() << endl;
-		cout << "Периметр круга: " << elip.get_perimeter() << endl;
-		elip.draw();
-
-		/*Triangle triangle(5, Color::console_red);
-		cout << "Площадь треугольника: " << triangle.get_area() << endl;
-		cout << "Периметр треугольника: " << triangle.get_perimeter() << endl;
-		triangle.draw();*/
-
-
-
+	setlocale(LC_ALL, "Russian");
+	/*Geometry::Square square(5, Geometry::Color::console_red);
+	cout << "Площадь квадрата: " << square.get_area() << endl;
+	cout << "Периметр квадрата: " << square.get_perimeter() << endl;
+	square.draw();*/
+	char key = 0;
+	Geometry::Rectangle rect1(100, 400, Geometry::Color::yellow, 5, 200, 400);
+	/*cout << "Площадь прямоугольника: " << rect1.get_area() << endl;
+	cout << "Периметр прямоугольника: " << rect1.get_perimeter() << endl;
+	rect1.draw();*/
+	cout << rect1.get_area() << endl;
+	cout << rect1.get_perimeter() << endl;
+	while (key != ' ')
+	{
+		rect1.draw();
+		if (_kbhit())key = _getch();
 	}
+
+	/*Geometry::Circle elip(100, Geometry::Color::red, 5, 200, 400);
+	cout << "Площадь круга: " << elip.get_area() << endl;
+	cout << "Периметр круга: " << elip.get_perimeter() << endl;
+	elip.draw();*/
+
+	Geometry::EquilateralTriangle et(100, Geometry::Color::green, 5, 200, 200);
+	cout << et.get_height() << endl;
+	cout << et.get_area() << endl;
+	cout << et.get_perimeter() << endl;
+	//cin.get();
+	key = 0;
+	while (key != ' ')
+	{
+		et.draw();
+		if (_kbhit())key = _getch();
+	}
+	//Sleep(10000);
+	//cin.get();
+
+	/*Triangle triangle(5, Color::console_red);
+	cout << "Площадь треугольника: " << triangle.get_area() << endl;
+	cout << "Периметр треугольника: " << triangle.get_perimeter() << endl;
+	triangle.draw();*/
+
+
+
+}

@@ -331,6 +331,166 @@ namespace Geometry
 			}
 		}
 	};
+	class IsoscalesTriangle :public Triangle
+	{
+		double side1;
+		double side2;
+	public:
+		double get_side1()const
+		{
+			return side1;
+		}
+		double get_side2()const
+		{
+			return side2;
+		}
+		double get_height()const
+		{
+			return sqrt(pow(side1, 2) - pow(side2, 2) / 4);
+		}
+
+		void set_side1(double side1)
+		{
+			if (side1 <= 0)side1 = 1;
+			this->side1 = side1;
+		}
+		void set_side2(double side2)
+		{
+			if (side2 <= 0)side2 = 1;
+			this->side2 = side2;
+		}
+		double get_area()const
+		{
+			return 1 / 2 * side2 * this->get_height();
+		}
+		double get_perimeter()const
+		{
+			return side1 * 2 + side2;
+		}
+		void draw()const
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, width, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+			const POINT points[] =
+			{
+				{start_x,start_y + this->get_height()},
+				{start_x + side1,start_y + this->get_height()},
+				{start_x + side2,start_y}
+			};
+			Polygon(hdc, points, sizeof(points) / sizeof(POINT));
+			DeleteObject(hBrush);
+			DeleteObject(hPen);
+			ReleaseDC(hwnd, hdc);
+
+		}
+		IsoscalesTriangle(double side1, double side2, Color color = Color::white, unsigned int width = 5, unsigned int start_x = 100,
+			unsigned int start_y = 100) :Triangle(color, width, start_x, start_y)
+		{
+			set_side1(side1);
+			set_side2(side2);
+		}
+		~IsoscalesTriangle()
+		{
+
+		}
+		void start_draw()const
+		{
+			while (true)
+			{
+				draw();
+			}
+		}
+	};
+	class RightTriangle :public Triangle
+	{
+		double side1;
+		double side2;
+		double side3;
+	public:
+		double get_side1()const
+		{
+			return side1;
+		}
+		double get_side2()const
+		{
+			return side2;
+		}
+		double get_side3()const
+		{
+			return side3;
+		}
+		double get_height()const
+		{
+			return side1*side2/side3;
+		}
+
+		void set_side1(double side1)
+		{
+			if (side1 <= 0)side1 = 1;
+			this->side1 = side1;
+		}
+		void set_side2(double side2)
+		{
+			if (side2 <= 0)side2 = 1;
+			this->side2 = side2;
+		}
+
+		void set_side3(double side3)
+		{
+			if (side3 <= 0)side3 = 1;
+			this->side3 = side3;
+		}
+		double get_area()const
+		{
+			return 1/2*side3* this->get_height();
+		}
+		double get_perimeter()const
+		{
+			return side1+ side2+side3;
+		}
+		void draw()const
+		{
+			HWND hwnd = GetConsoleWindow();
+			HDC hdc = GetDC(hwnd);
+			HPEN hPen = CreatePen(PS_SOLID, width, color);
+			HBRUSH hBrush = CreateSolidBrush(color);
+			SelectObject(hdc, hPen);
+			SelectObject(hdc, hBrush);
+			const POINT points[] =
+			{
+				{start_x,start_y + this->get_height()},
+				{start_x + side1,start_y + this->get_height()},
+				{start_x + side3 / 2,start_y}
+			};
+			Polygon(hdc, points, sizeof(points) / sizeof(POINT));
+			DeleteObject(hBrush);
+			DeleteObject(hPen);
+			ReleaseDC(hwnd, hdc);
+
+		}
+		RightTriangle(double side1, double side2, double side3, Color color = Color::yellow, unsigned int width = 5, unsigned int start_x = 100,
+			unsigned int start_y = 100) :Triangle(color, width, start_x, start_y)
+		{
+			set_side1(side1);
+			set_side2(side2);
+			set_side3(side3);
+		}
+		~RightTriangle()
+		{
+
+		}
+		void start_draw()const
+		{
+			while (true)
+			{
+				draw();
+			}
+		}
+	};
 }
 
 
@@ -407,8 +567,8 @@ void main()
 		rect1.draw();
 		if (_kbhit())key = _getch();
 	}*/
-	
-	std::thread rect1_thread(&Geometry::Rectangle::start_draw,rect1);
+
+	std::thread rect1_thread(&Geometry::Rectangle::start_draw, rect1);
 
 	/*Geometry::Circle elip(100, Geometry::Color::red, 5, 200, 400);
 	cout << "Площадь круга: " << elip.get_area() << endl;
@@ -427,16 +587,36 @@ void main()
 		if (_kbhit())key = _getch();
 	}*/
 
-std::thread et_thread(&Geometry::EquilateralTriangle::start_draw, et);
+	std::thread et_thread(&Geometry::EquilateralTriangle::start_draw, et);
 	//Sleep(10000);
 	//cin.get();
-	et_thread.join();
-	rect1_thread.join();
+	
 	/*Triangle triangle(5, Color::console_red);
 	cout << "Площадь треугольника: " << triangle.get_area() << endl;
 	cout << "Периметр треугольника: " << triangle.get_perimeter() << endl;
 	triangle.draw();*/
 
+	Geometry::IsoscalesTriangle it(100, 50, Geometry::Color::white, 5, 600,600);
+	cout << it.get_height() << endl;
+	cout << it.get_area() << endl;
+	cout << it.get_perimeter() << endl;
+	key = 0;
 
+	std::thread it_thread(&Geometry::IsoscalesTriangle::start_draw, it);
+
+	Geometry::RightTriangle it(50,50,100, Geometry::Color::green, 5, 1000, 1000);
+	cout << rt.get_height() << endl;
+	cout << rt.get_area() << endl;
+	cout << rt.get_perimeter() << endl;
+	key = 0;
+
+	std::thread rt_thread(&Geometry::RightTriangle::start_draw, rt);
+	
+	
+	rt_thread.join();
+	et_thread.join();
+	rect1_thread.join();
+	it_thread.join();
+	
 
 }

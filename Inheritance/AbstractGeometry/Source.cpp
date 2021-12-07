@@ -425,7 +425,7 @@ namespace Geometry
 		}
 		double get_height()const
 		{
-			return side1*side2/side3;
+			return side1 * side2 / side3;
 		}
 
 		void set_side1(double side1)
@@ -446,11 +446,11 @@ namespace Geometry
 		}
 		double get_area()const
 		{
-			return 1/2*side3* this->get_height();
+			return 1 / 2 * side3 * this->get_height();
 		}
 		double get_perimeter()const
 		{
-			return side1+ side2+side3;
+			return side1 + side2 + side3;
 		}
 		void draw()const
 		{
@@ -590,13 +590,13 @@ void main()
 	std::thread et_thread(&Geometry::EquilateralTriangle::start_draw, et);
 	//Sleep(10000);
 	//cin.get();
-	
+
 	/*Triangle triangle(5, Color::console_red);
 	cout << "Площадь треугольника: " << triangle.get_area() << endl;
 	cout << "Периметр треугольника: " << triangle.get_perimeter() << endl;
 	triangle.draw();*/
 
-	Geometry::IsoscalesTriangle it(100, 50, Geometry::Color::white, 5, 600,600);
+	Geometry::IsoscalesTriangle it(100, 50, Geometry::Color::white, 5, 600, 600);
 	cout << it.get_height() << endl;
 	cout << it.get_area() << endl;
 	cout << it.get_perimeter() << endl;
@@ -604,19 +604,19 @@ void main()
 
 	std::thread it_thread(&Geometry::IsoscalesTriangle::start_draw, it);
 
-	Geometry::RightTriangle it(50,50,100, Geometry::Color::green, 5, 1000, 1000);
+	Geometry::RightTriangle it(50, 50, 100, Geometry::Color::green, 5, 1000, 1000);
 	cout << rt.get_height() << endl;
 	cout << rt.get_area() << endl;
 	cout << rt.get_perimeter() << endl;
 	key = 0;
 
 	std::thread rt_thread(&Geometry::RightTriangle::start_draw, rt);
-	
-	
-	rt_thread.join();
+
+
 	et_thread.join();
 	rect1_thread.join();
 	it_thread.join();
-	
+	rt_thread.join();
+
 
 }
